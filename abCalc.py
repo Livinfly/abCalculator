@@ -55,6 +55,20 @@ class MainWindow(QMainWindow):
                 elif x in {'+', '-', '*', '/'}:
                     ok = False
             return str
+        def DelMorePoints(str):
+            ok = True
+            for i, x in enumerate(str):
+                if x == '.':
+                    if ok:
+                        ok = False
+                    else:
+                        if i+1 < len(str):
+                            str = str[:i]+str[i+1:]
+                        else:
+                            str = str[:i]
+                elif x in {'+', '-', '*', '/'}:
+                    ok = True
+            return str
         val = self.dict[self.sender()]
         if self.error:
             if val == 'C':
@@ -92,6 +106,7 @@ class MainWindow(QMainWindow):
             if self.course[-1].isdigit():
                 self.course += val
         self.course = DelLeadingZeros(self.course)
+        self.course = DelMorePoints(self.course)
         self.ui.Course.setText(self.course[-min(32, len(self.course)):-1]+self.course[-1])
 
 def Actived(func):
