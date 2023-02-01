@@ -1,0 +1,7 @@
+Signal.py
+*.qrc
+*.ui
+build
+dist
+__pycache__
+abCalc.spec
