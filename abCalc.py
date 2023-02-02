@@ -112,6 +112,7 @@ class MainWindow(QMainWindow):
 def Actived(func):
     if mainWindow.window().isActiveWindow():
         func()
+        keyboard.stash_state()
 def KeyboardInput():
     keyboard.add_hotkey('esc', lambda : Actived(app.exit))
 
