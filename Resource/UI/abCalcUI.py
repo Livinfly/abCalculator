@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLabel,
+from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLineEdit,
     QMainWindow, QMenuBar, QPushButton, QSizePolicy,
     QSpacerItem, QStatusBar, QTabWidget, QWidget)
 from .. import resource_rc
@@ -29,7 +29,7 @@ class Ui_mainWindow(object):
         font.setFamilies([u"Consolas"])
         mainWindow.setFont(font)
         mainWindow.setMouseTracking(False)
-        mainWindow.setFocusPolicy(Qt.ClickFocus)
+        mainWindow.setFocusPolicy(Qt.NoFocus)
         icon = QIcon()
         icon.addFile(u":/Image/Image/icon.png", QSize(), QIcon.Normal, QIcon.Off)
         mainWindow.setWindowIcon(icon)
@@ -229,40 +229,27 @@ class Ui_mainWindow(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
 
-        self.CurrentOperator = QLabel(self.centralwidget)
-        self.CurrentOperator.setObjectName(u"CurrentOperator")
-        font3 = QFont()
-        font3.setFamilies([u"Consolas"])
-        font3.setPointSize(32)
-        self.CurrentOperator.setFont(font3)
-        self.CurrentOperator.setAlignment(Qt.AlignCenter)
-
-        self.horizontalLayout.addWidget(self.CurrentOperator)
-
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_4)
-
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_5)
-
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_3)
-
-        self.horizontalSpacer = QSpacerItem(13, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
-        self.Result = QLabel(self.centralwidget)
+        self.Result = QLineEdit(self.centralwidget)
         self.Result.setObjectName(u"Result")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.Result.sizePolicy().hasHeightForWidth())
+        self.Result.setSizePolicy(sizePolicy1)
         self.Result.setFont(font1)
+        self.Result.setFocusPolicy(Qt.NoFocus)
+        self.Result.setLayoutDirection(Qt.LeftToRight)
+        self.Result.setStyleSheet(u"#Result {\n"
+"	background:transparent;\n"
+"	border-width:0;\n"
+"	border-style:outset;\n"
+"}")
         self.Result.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.Result.setReadOnly(True)
 
         self.horizontalLayout.addWidget(self.Result)
 
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.horizontalSpacer_6 = QSpacerItem(40, 58, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer_6)
 
@@ -274,25 +261,24 @@ class Ui_mainWindow(object):
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer_7)
 
-        self.Course = QLabel(self.centralwidget)
+        self.Course = QLineEdit(self.centralwidget)
         self.Course.setObjectName(u"Course")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.Course.sizePolicy().hasHeightForWidth())
-        self.Course.setSizePolicy(sizePolicy1)
-        font4 = QFont()
-        font4.setFamilies([u"Consolas"])
-        font4.setPointSize(15)
-        self.Course.setFont(font4)
-        self.Course.setStyleSheet(u"#typing {\n"
-"	color : rgb(109, 109, 109)\n"
+        font3 = QFont()
+        font3.setFamilies([u"Microsoft YaHei UI"])
+        font3.setPointSize(15)
+        self.Course.setFont(font3)
+        self.Course.setFocusPolicy(Qt.NoFocus)
+        self.Course.setStyleSheet(u"#Course {\n"
+"	background:transparent;\n"
+"	border-width:0;\n"
+"	border-style:outset;\n"
 "}")
         self.Course.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.Course.setReadOnly(True)
 
         self.horizontalLayout_2.addWidget(self.Course)
 
@@ -341,7 +327,6 @@ class Ui_mainWindow(object):
         self.ButtonEqual.setText(QCoreApplication.translate("mainWindow", u"=", None))
         self.Button5.setText(QCoreApplication.translate("mainWindow", u"5", None))
         self.Button1.setText(QCoreApplication.translate("mainWindow", u"1", None))
-        self.CurrentOperator.setText("")
         self.Result.setText(QCoreApplication.translate("mainWindow", u"0", None))
         self.Course.setText(QCoreApplication.translate("mainWindow", u"0", None))
     # retranslateUi
