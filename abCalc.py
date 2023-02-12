@@ -1,27 +1,13 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QKeyEvent
 from Resource.UI.abCalcUI import Ui_mainWindow as abCalcUI
-import keyboard
-
-# PySide6-uic DemoUI.ui -o DemoUI.py
-# from DemoUI import DemoUI
-
-# self.ui.__Action__.triggered.connect(__Function__)
-#           Button   clicked
-#           ComboBox currentIndexChanged
-#           SpinBox  valueChanged
-# 自定义函数.属性名.connect
-
-# 此窗口是否活跃
-# self.window().isActiveWindow()
-# self.window().isMinimized()
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = abCalcUI()
         self.ui.setupUi(self)
-        # 启动移到指定位置
-        # self.ToPlace()
 
         self.dict = {
             self.ui.Button0: '0', self.ui.Button1: '1', self.ui.Button2: '2',
@@ -37,13 +23,6 @@ class MainWindow(QMainWindow):
         ButtonList = self.findChildren(QPushButton)
         for btn in ButtonList:
             btn.clicked.connect(self.Band)
-    # def ToPlace(self):
-    #     screen = QGuiApplication.primaryScreen().geometry()
-    #     size = self.geometry()
-    #
-    #     Left = (screen.width() - size.width()) / 5
-    #     Top = (screen.height() - size.height()) * 3 / 5
-    #     self.move(Left, Top)
     def Band(self):
         def DelLeadingZeros(str):
             ok = False
@@ -92,7 +71,10 @@ class MainWindow(QMainWindow):
             self.ui.Result.setText('0')
         elif val == 'B':
             if len(self.course) > 1:
-                self.course = self.course[:-1]
+                if len(self.course) == 2 and self.course[0] == '-':
+                    self.course = '0'
+                else :
+                    self.course = self.course[:-1]
             elif len(self.course) == 1:
                 self.course = str('0')
         elif val.isdigit():
@@ -108,58 +90,91 @@ class MainWindow(QMainWindow):
         self.course = DelLeadingZeros(self.course)
         self.course = DelMorePoints(self.course)
         self.ui.Course.setText(self.course[-min(32, len(self.course)):-1]+self.course[-1])
-
-def Actived(func):
-    if mainWindow.window().isActiveWindow():
-        func()
-        keyboard.stash_state()
-def KeyboardInput():
-    keyboard.add_hotkey('esc', lambda : Actived(app.exit))
-
-    keyboard.add_hotkey('alt', lambda: Actived(mainWindow.ui.Button0.click))
-    keyboard.add_hotkey('z', lambda : Actived(mainWindow.ui.Button1.click))
-    keyboard.add_hotkey('x', lambda: Actived(mainWindow.ui.Button2.click))
-    keyboard.add_hotkey('c', lambda: Actived(mainWindow.ui.Button3.click))
-    keyboard.add_hotkey('a', lambda: Actived(mainWindow.ui.Button4.click))
-    keyboard.add_hotkey('s', lambda: Actived(mainWindow.ui.Button5.click))
-    keyboard.add_hotkey('d', lambda: Actived(mainWindow.ui.Button6.click))
-    keyboard.add_hotkey('q', lambda: Actived(mainWindow.ui.Button7.click))
-    keyboard.add_hotkey('w', lambda: Actived(mainWindow.ui.Button8.click))
-    keyboard.add_hotkey('e', lambda: Actived(mainWindow.ui.Button9.click))
-    keyboard.add_hotkey('f', lambda: Actived(mainWindow.ui.ButtonPlus.click))
-    keyboard.add_hotkey('g', lambda: Actived(mainWindow.ui.ButtonSub.click))
-    keyboard.add_hotkey('r', lambda: Actived(mainWindow.ui.ButtonMul.click))
-    keyboard.add_hotkey('t', lambda: Actived(mainWindow.ui.ButtonDiv.click))
-    keyboard.add_hotkey('v', lambda: Actived(mainWindow.ui.ButtonPoint.click))
-    keyboard.add_hotkey('b', lambda: Actived(mainWindow.ui.ButtonBackspace.click))
-    keyboard.add_hotkey('n', lambda: Actived(mainWindow.ui.ButtonClear.click))
-    keyboard.add_hotkey('space', lambda: Actived(mainWindow.ui.ButtonEqual.click))
-
-    keyboard.add_hotkey('0', lambda: Actived(mainWindow.ui.Button0.click))
-    keyboard.add_hotkey('1', lambda: Actived(mainWindow.ui.Button1.click))
-    keyboard.add_hotkey('2', lambda: Actived(mainWindow.ui.Button2.click))
-    keyboard.add_hotkey('3', lambda: Actived(mainWindow.ui.Button3.click))
-    keyboard.add_hotkey('4', lambda: Actived(mainWindow.ui.Button4.click))
-    keyboard.add_hotkey('5', lambda: Actived(mainWindow.ui.Button5.click))
-    keyboard.add_hotkey('6', lambda: Actived(mainWindow.ui.Button6.click))
-    keyboard.add_hotkey('7', lambda: Actived(mainWindow.ui.Button7.click))
-    keyboard.add_hotkey('8', lambda: Actived(mainWindow.ui.Button8.click))
-    keyboard.add_hotkey('9', lambda: Actived(mainWindow.ui.Button9.click))
-    keyboard.add_hotkey('shift+=', lambda: Actived(mainWindow.ui.ButtonPlus.click))
-    keyboard.add_hotkey('+', lambda: Actived(mainWindow.ui.ButtonPlus.click))
-    keyboard.add_hotkey('-', lambda: Actived(mainWindow.ui.ButtonSub.click))
-    keyboard.add_hotkey('shift+8', lambda: Actived(mainWindow.ui.ButtonMul.click))
-    keyboard.add_hotkey('*', lambda: Actived(mainWindow.ui.ButtonMul.click))
-    keyboard.add_hotkey('/', lambda: Actived(mainWindow.ui.ButtonDiv.click))
-    keyboard.add_hotkey('.', lambda: Actived(mainWindow.ui.ButtonPoint.click))
-    keyboard.add_hotkey('backspace', lambda: Actived(mainWindow.ui.ButtonBackspace.click))
-    keyboard.add_hotkey('`', lambda: Actived(mainWindow.ui.ButtonClear.click))
-    keyboard.add_hotkey('enter', lambda: Actived(mainWindow.ui.ButtonEqual.click))
-    keyboard.add_hotkey('=', lambda: Actived(mainWindow.ui.ButtonEqual.click))
+    def keyPressEvent(self, e: QKeyEvent):
+        # modifiers = e.modifiers()
+        key = e.key()
+        match key:
+            case Qt.Key_Escape:
+                app.exit()
+            case Qt.Key_Alt:
+                mainWindow.ui.Button0.click()
+            case Qt.Key_Z:
+                mainWindow.ui.Button1.click()
+            case Qt.Key_X:
+                mainWindow.ui.Button2.click()
+            case Qt.Key_C:
+                mainWindow.ui.Button3.click()
+            case Qt.Key_A:
+                mainWindow.ui.Button4.click()
+            case Qt.Key_S:
+                mainWindow.ui.Button5.click()
+            case Qt.Key_D:
+                mainWindow.ui.Button6.click()
+            case Qt.Key_Q:
+                mainWindow.ui.Button7.click()
+            case Qt.Key_W:
+                mainWindow.ui.Button8.click()
+            case Qt.Key_E:
+                mainWindow.ui.Button9.click()
+            case Qt.Key_F:
+                mainWindow.ui.ButtonPlus.click()
+            case Qt.Key_G:
+                mainWindow.ui.ButtonSub.click()
+            case Qt.Key_R:
+                mainWindow.ui.ButtonMul.click()
+            case Qt.Key_T:
+                mainWindow.ui.ButtonDiv.click()
+            case Qt.Key_V:
+                mainWindow.ui.ButtonPoint.click()
+            case Qt.Key_B:
+                mainWindow.ui.ButtonBackspace.click()
+            case Qt.Key_N:
+                mainWindow.ui.ButtonClear.click()
+            case Qt.Key_Space:
+                mainWindow.ui.ButtonEqual.click()
+            case Qt.Key_0:
+                mainWindow.ui.Button0.click()
+            case Qt.Key_1:
+                mainWindow.ui.Button1.click()
+            case Qt.Key_2:
+                mainWindow.ui.Button2.click()
+            case Qt.Key_3:
+                mainWindow.ui.Button3.click()
+            case Qt.Key_4:
+                mainWindow.ui.Button4.click()
+            case Qt.Key_5:
+                mainWindow.ui.Button5.click()
+            case Qt.Key_6:
+                mainWindow.ui.Button6.click()
+            case Qt.Key_7:
+                mainWindow.ui.Button7.click()
+            case Qt.Key_8:
+                mainWindow.ui.Button8.click()
+            case Qt.Key_9:
+                mainWindow.ui.Button9.click()
+            case Qt.Key_Plus:
+                mainWindow.ui.ButtonPlus.click()
+            case Qt.Key_Minus:
+                mainWindow.ui.ButtonSub.click()
+            case Qt.Key_Asterisk:
+                mainWindow.ui.ButtonMul.click()
+            case Qt.Key_Slash:
+                mainWindow.ui.ButtonDiv.click()
+            case Qt.Key_Period:
+                mainWindow.ui.ButtonPoint.click()
+            case Qt.Key_Backspace:
+                mainWindow.ui.ButtonBackspace.click()
+            case Qt.Key_QuoteLeft:
+                mainWindow.ui.ButtonClear.click()
+            case Qt.Key_Return:
+                mainWindow.ui.ButtonEqual.click()
+            case Qt.Key_Equal:
+                mainWindow.ui.ButtonEqual.click()
+            case Qt.Key_Enter:
+                mainWindow.ui.ButtonEqual.click()
 
 if __name__ == '__main__':
     app = QApplication([])
     mainWindow = MainWindow()
-    KeyboardInput()
     mainWindow.show()
     app.exec()

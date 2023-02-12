@@ -2,7 +2,7 @@ A simple Calculator but with special key mapping.
 
 ## Environment
 
-Python 3.8, Pyside6
+Python 3.10, Pyside6
 
 ---
 

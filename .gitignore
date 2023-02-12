@@ -1,4 +1,3 @@
-Signal.py
 *.qrc
 *.ui
 build
@@ -7,3 +6,5 @@ __pycache__
 abCalc.spec
 .idea
 venv
+test.py
+Signal.py
